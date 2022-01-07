@@ -94,10 +94,13 @@ class Parser:
 
             # You will need to look at the `Try` / `Except` keywords in python
             # and implement an exception for the error you will find in
-            # the error message you receive. 
+            # the error message you receive.
             while True:
-                rec = self.get_record(f_obj)
-                yield rec
+                try:
+                    rec = self.get_record(f_obj)
+                    yield rec
+                except StopIteration:
+                    break
 
     def _get_record(self, f_obj: io.TextIOWrapper) -> Union[Tuple[str, str], Tuple[str, str, str]]:
         """
@@ -118,6 +121,10 @@ class FastaParser(Parser):
         returns the next fasta record
         """
 
+        # yield each progressive line from f_obj iterable
+        header = next(f_obj).rstrip()
+        sequence = next(f_obj).rstrip()
+        return header, sequence
 
 class FastqParser(Parser):
     """
@@ -128,3 +135,9 @@ class FastqParser(Parser):
         returns the next fastq record
         """
 
+        # yield each progressive line from f_obj iterable
+        header = next(f_obj).rstrip()
+        sequence = next(f_obj).rstrip()
+        _ = next(f_obj).rstrip()  # ignore the (+)
+        quality = next(f_obj).rstrip()
+        return header, sequence,quality
