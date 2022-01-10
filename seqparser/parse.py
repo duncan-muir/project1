@@ -96,10 +96,14 @@ class Parser:
             # and implement an exception for the error you will find in
             # the error message you receive.
             while True:
+
+                # attempt to read another record
                 try:
                     rec = self.get_record(f_obj)
                     yield rec
+
                 except StopIteration:
+                    # f_obj iterator exhausted, exit loop
                     break
 
     def _get_record(self, f_obj: io.TextIOWrapper) -> Union[Tuple[str, str], Tuple[str, str, str]]:
@@ -121,10 +125,11 @@ class FastaParser(Parser):
         returns the next fasta record
         """
 
-        # yield each progressive line from f_obj iterable
+        # yield each progressive line from f_obj iterable, strip newline
         header = next(f_obj).rstrip()
         sequence = next(f_obj).rstrip()
         return header, sequence
+
 
 class FastqParser(Parser):
     """
@@ -135,9 +140,9 @@ class FastqParser(Parser):
         returns the next fastq record
         """
 
-        # yield each progressive line from f_obj iterable
+        # yield each progressive line from f_obj iterable, strip newline
         header = next(f_obj).rstrip()
         sequence = next(f_obj).rstrip()
         _ = next(f_obj).rstrip()  # ignore the (+)
         quality = next(f_obj).rstrip()
-        return header, sequence,quality
+        return header, sequence, quality
