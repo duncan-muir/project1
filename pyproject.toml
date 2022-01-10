@@ -5,6 +5,8 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "seqparser"
 authors = [{name = "Duncan Muir", email = "duncan.muir@ucsf.edu"}]
+readme = "README.md"
 license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: MIT License"]
 dynamic = ["version", "description"]
+dependencies = ["pytest"]
